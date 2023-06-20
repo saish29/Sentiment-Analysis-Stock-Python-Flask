@@ -79,7 +79,7 @@ def score_news(parsed_news_df):
 
 def plot_hourly_sentiment(parsed_and_scored_news, ticker):
     # Group by date and ticker columns from parsed_and_scored_news and calculate the mean
-    mean_scores = parsed_and_scored_news.resample('H').mean()
+    mean_scores = parsed_and_scored_news.drop('headline', axis=1).resample('H').mean()
     
     # Create a new column called 'color' that maps positive sentiment scores to green and negative scores to red
     mean_scores['color'] = np.where(mean_scores['sentiment_score'] > 0, 'green', 'red')
@@ -106,7 +106,7 @@ def plot_hourly_sentiment(parsed_and_scored_news, ticker):
 def plot_daily_sentiment(parsed_and_scored_news, ticker):
    
     # Group by date and ticker columns from scored_news and calculate the mean
-    mean_scores = parsed_and_scored_news.resample('D').mean()
+    mean_scores = parsed_and_scored_news.drop('headline', axis=1).resample('D').mean()
 
     # Plot a bar chart with plotly
     fig = px.bar(mean_scores, x=mean_scores.index, y='sentiment_score', title = ticker + ' Daily Sentiment Scores', color_discrete_sequence = ["coral"])
