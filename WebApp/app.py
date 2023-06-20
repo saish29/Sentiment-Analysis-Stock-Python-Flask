@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
 import plotly
+import plotly.graph_objects as go
 import plotly.express as px
 import json # for graph plotting in website
 # NLTK VADER for sentiment analysis
@@ -85,36 +86,53 @@ def plot_hourly_sentiment(parsed_and_scored_news, ticker):
     mean_scores['color'] = np.where(mean_scores['sentiment_score'] > 0, 'green', 'red')
 
     # Plot a bar chart with plotly, setting the color of each bar based on the 'color' column
-    fig = px.bar(mean_scores, x=mean_scores.index, y='sentiment_score', title=ticker + ' Hourly Sentiment Scores',
-             color='color', color_discrete_map={'green': 'green', 'red': 'red'})
-    # Update the x and y axis labels
-    fig.update_xaxes(title_text='Date and Time')
-    fig.update_yaxes(title_text='Sentiment Score')
+    fig = go.Figure(data=go.Bar(x=mean_scores.index, y=mean_scores['sentiment_score'],
+                               marker_color=mean_scores['color']))
+
+    # Update the layout to apply a dark theme
+    fig.update_layout(
+        title=ticker + ' Hourly Sentiment Scores',
+        xaxis_title='Date and Time',
+        yaxis_title='Sentiment Score',
+        plot_bgcolor='#01111b',
+        paper_bgcolor='#01111b',
+        font_color='#f4f4f4'
+    )
 
     # Add custom labels for positive and negative sentiment scores
-    fig.update_layout(legend=dict(title='', orientation='h', y=1.1, x=0.5, xanchor='center'),
-                    coloraxis_colorbar=dict(title='Sentiment', tickvals=[-1, 0, 1],
-                                            ticktext=['Negative', 'Neutral', 'Positive'],
-                                            tickmode='array', ticks='outside'))
-
-    # Remove the legend
-    fig.update_layout(showlegend=False)
-
+    fig.update_layout(
+        coloraxis_colorbar=dict(
+            title='Sentiment',
+            tickvals=[-1, 0, 1],
+            ticktext=['Negative', 'Neutral', 'Positive'],
+            tickmode='array',
+            ticks='outside',
+            len=0.6,
+            thickness=15,
+            tickfont=dict(color='#f4f4f4')
+        )
+    )
 
     return fig
 
+
 def plot_daily_sentiment(parsed_and_scored_news, ticker):
-   
-    # Group by date and ticker columns from scored_news and calculate the mean
     mean_scores = parsed_and_scored_news.drop('headline', axis=1).resample('D').mean()
 
     # Plot a bar chart with plotly
-    fig = px.bar(mean_scores, x=mean_scores.index, y='sentiment_score', title = ticker + ' Daily Sentiment Scores', color_discrete_sequence = ["coral"])
-    fig.update_xaxes(title_text='Date and Time')
-    fig.update_yaxes(title_text='Sentiment Score')
+    fig = go.Figure(data=go.Bar(x=mean_scores.index, y=mean_scores['sentiment_score'],
+                               marker_color='coral'))
 
-    # fig.show()
-    
+    # Update the layout to apply a dark theme
+    fig.update_layout(
+        title=ticker + ' Daily Sentiment Scores',
+        xaxis_title='Date',
+        yaxis_title='Sentiment Score',
+        plot_bgcolor='#01111b',
+        paper_bgcolor='#01111b',
+        font_color='#f4f4f4'
+    )
+
     return fig
 
 
