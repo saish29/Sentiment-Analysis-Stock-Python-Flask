@@ -1,149 +1,108 @@
 <!doctype html>
 <html>
-	<style>
-		body            { font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;}
-		a, h1, h2       { color: #01111b; }
-		h1, h2          { margin: 0; }
-		h1              { border-bottom: 2px solid #eee; }
-		h2              { font-size: 1.2em; }
 
-		table.dataframe, .dataframe th, .dataframe td {
-		  border: none;
-		  border-bottom: 1px solid #C8C8C8;
-		  border-collapse: collapse;
-		  text-align:left;
-		  padding: 10px;
-		  margin-bottom: 40px;
-		  font-size: 0.9em;
-		}
+<head>
+    <title>TechStock Sentiment Analyzer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #121212;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+        }
 
-		form {
-			margin: auto;
-			width: 80%;
-		}
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            text-align: center;
+        }
 
-		.button {
-		  background-color: #4CAF50; /* Green */
-		  border: none;
-		  color: white;
-		  padding: 15px 32px;
-		  text-align: center;
-		  text-decoration: none;
-		  display: inline-block;
-		  font-size: 16px;
-		}
+        h1 {
+            font-size: 48px;
+            margin-bottom: 30px;
+            color: #00BFFF;
+        }
 
-		.result {
-			margin: auto;
-			width: 80%;
-			border: 1px solid #f0f;
-		}
+        .subtitle {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
 
-		input[type=text] {
-		   height: 50px;
-		   font-size:24px;
-		}
+        form {
+            margin-bottom: 40px;
+        }
 
+        label {
+            font-size: 20px;
+            margin-right: 10px;
+        }
 
-		body {
-			background-color:rgb(231, 230, 236);
-		} 
+        input[type="text"] {
+            height: 40px;
+            width: 300px;
+            font-size: 16px;
+            padding: 5px;
+            border: 1px solid #CCCCCC;
+            border-radius: 4px;
+        }
 
-		.push_button {
-			position: relative;
-			width:220px;
-			height:40px;
-			text-align:center;
-			color:#FFF;
-			text-decoration:none;
-			line-height:43px;
-			font-family:'Oswald', Helvetica;
-			display: block;
-			margin: 30px;
-		}
-		.push_button:before {
-			background:#f0f0f0;
-			background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#D0D0D0), to(#f0f0f0));
-			
-			-webkit-border-radius:5px;
-			-moz-border-radius:5px;
-			border-radius:5px;
-			
-			-webkit-box-shadow:0 1px 2px rgba(0, 0, 0, .5) inset, 0 1px 0 #FFF; 
-			-moz-box-shadow:0 1px 2px rgba(0, 0, 0, .5) inset, 0 1px 0 #FFF; 
-			box-shadow:0 1px 2px rgba(0, 0, 0, .5) inset, 0 1px 0 #FFF;
-			
-			position: relative;
-			content: "";
-			left: -6px; right: -6px;
-			top: -6px; bottom: -10px;
-			z-index: -1;
-		}
+        input[type="submit"] {
+            height: 40px;
+            width: 120px;
+            font-size: 16px;
+            background-color: #00BFFF;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-		.push_button:active {
-			-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .1) inset;
-			top:5px;
-		}
-		.push_button:active:before{
-			top: -11px;
-			bottom: -5px;
-			content: "";
-		}
+        input[type="submit"]:hover {
+            background-color: #0077FF;
+        }
 
-		.blue {
-			text-shadow:-1px -1px 0 #2C7982;
-			background: #3EACBA;
-			border:1px solid #379AA4;
-			background-image:-webkit-linear-gradient(top, #48C6D4, #3EACBA);
-			background-image:-moz-linear-gradient(top, #48C6D4, #3EACBA);
-			background-image:-ms-linear-gradient(top, #48C6D4, #3EACBA);
-			background-image:-o-linear-gradient(top, #48C6D4, #3EACBA);
-			background-image:linear-gradient(top, #48C6D4, #3EACBA);
-			
-			-webkit-border-radius:5px;
-			-moz-border-radius:5px;
-			border-radius:5px;
-			
-			-webkit-box-shadow:0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .1) inset, 0 4px 0 #338A94, 0 4px 2px rgba(0, 0, 0, .5);
-			-moz-box-shadow:0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .1) inset, 0 4px 0 #338A94, 0 4px 2px rgba(0, 0, 0, .5);
-			box-shadow:0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .1) inset, 0 4px 0 #338A94, 0 4px 2px rgba(0, 0, 0, .5);
-		}
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
 
-		.blue:hover {
-			background: #48C6D4;
-			background-image:-webkit-linear-gradient(top, #3EACBA, #48C6D4);
-			background-image:-moz-linear-gradient(top, #3EACBA, #48C6D4);
-			background-image:-ms-linear-gradient(top, #3EACBA, #48C6D4);
-			background-image:-o-linear-gradient(top, #3EACBA, #48C6D4);
-			background-image:linear-gradient(top, #3EACBA, #48C6D4);
-		}
-	</style>
-	
-	<head>
-		<title>Stock News Sentiment Analyzer</title>
-	</head>
-	
-	<body style="font-family:arial, sans-serif", style="width: 70%">
-		<center>
-			<h1 style="padding:10px">Stock News Sentiment Analyzer</h1>
-			
-			<h3>Enter a Stock Ticker Symbol to See the Hourly and Daily Sentiment Scores of the Stock</h3>
+        .disclaimer {
+            font-size: 14px;
+            opacity: 0.8;
+        }
 
-				<form action="sentiment" method="POST" align="center">
-						
-					<b>Stock Ticker: </b>	
-					<input id="text_field" name="ticker" type="text" required> 				
-					<center><input id="submit_button" type="Submit" class="push_button blue"></center>
-					
-				</form>
-			<p>
-				The sentiment is obtained by performing sentimental analysis on recent news headlines using the 
-				<a href="https://www.nltk.org/_modules/nltk/sentiment/vader.html">NLTK Sentiment Vader Python library</a>.<br><br>
-				The recent news headlines are obtained from <a href="https://finviz.com">FinViz website</a>.
-				<br><br>
-				<i>Disclaimer: This page is not meant to represent any form of financial advice. 
-				Any investments you make will carry risk so remember to do your due diligence and research before doing so.</i>
-			</p>
-		</center>
-	</body>
+        footer {
+            margin-top: 40px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>TechStock Sentiment Analyzer</h1>
+
+        <p class="subtitle">Unlock the Power of Sentiment Analysis for Tech Stocks</p>
+
+        <form action="sentiment" method="POST">
+            <label for="ticker">Enter a Tech Stock Ticker:</label>
+            <input id="ticker" name="ticker" type="text" required>
+            <input type="submit" value="Analyze">
+        </form>
+
+        <p>Discover valuable insights into the sentiment surrounding the latest news headlines for tech stocks. Our advanced sentiment analysis algorithms leverage cutting-edge natural language processing techniques.</p>
+        <p>Stay ahead of the curve by harnessing the power of sentiment analysis and make informed decisions in the fast-paced tech stock market.</p>
+
+        <p class="disclaimer">Disclaimer: This analysis is for informational purposes only and should not be considered as financial advice. Always do your own research and consult with a qualified financial advisor before making investment decisions.</p>
+
+        <footer>Developed by Saish Mandavkar</footer>
+    </div>
+</body>
+
 </html>
