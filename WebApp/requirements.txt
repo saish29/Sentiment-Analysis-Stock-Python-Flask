@@ -1,8 +1,0 @@
-flask
-pandas
-nltk
-urllib3
-bs4
-plotly
-numpy
-gunicorn
